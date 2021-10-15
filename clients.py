@@ -88,3 +88,22 @@ class Clientes():
             print("Has seleccionado el municipio de "+ mun)
 
         except Exception as error: print("Error en modulo selMun")
+
+    def cargarFecha(qDate):
+        try:
+            data=('{0}/{1}/{2}'.format(qDate.day(),qDate.month(),qDate.year()))
+            var.ui.txtFecha.setText(str(data))
+            var.dlgcalendar.hide()
+        except Exception as error:
+            print('Error en modulo cargarFecha', error)
+
+    def letraCapital():
+        try:
+            textoApel=var.ui.txtApel.text()
+            textoNom = var.ui.txtNome.text()
+            textoDir = var.ui.txtDir.text()
+            var.ui.txtApel.setText(textoApel.title())
+            var.ui.txtNome.setText(textoNom.title())
+            var.ui.txtDir.setText(textoDir.title())
+        except Exception as error:
+            print('Error en validar DNI')

@@ -16,6 +16,9 @@ class DialogAviso(QtWidgets.QDialog):
 
 class DialogCalendar(QtWidgets.QDialog):
     def __init__(self):
+        '''
+        Ventana calendario
+        '''
         super(DialogCalendar, self).__init__()
         var.dlgcalendar=Ui_windowcal()
         var.dlgcalendar.setupUi(self)
@@ -23,7 +26,7 @@ class DialogCalendar(QtWidgets.QDialog):
         mesactual = datetime.now().month
         anoactual = datetime.now().year
         var.dlgcalendar.calendarWidget.setSelectedDate((QtCore.QDate(anoactual,mesactual,diaactual)))
-        #var.dlgcalendar.calendarWidget.clicked.connect(clients.Clientes.cargarFecha)
+        var.dlgcalendar.calendarWidget.clicked.connect(clients.Clientes.cargarFecha)
 
 class Main(QtWidgets.QMainWindow):
     def __init__(self):
@@ -45,6 +48,9 @@ class Main(QtWidgets.QMainWindow):
         Eventos caja de texto
         '''
         var.ui.txtDNI.editingFinished.connect(clients.Clientes.validarDNI)
+        var.ui.txtApel.editingFinished.connect(clients.Clientes.letraCapital)
+        var.ui.txtNome.editingFinished.connect(clients.Clientes.letraCapital)
+        var.ui.txtDir.editingFinished.connect(clients.Clientes.letraCapital)
         '''
         Eventos combobox
         '''

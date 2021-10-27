@@ -22,17 +22,17 @@ class Clientes():
                         dni=dni.replace(dni[0],reemp_dig_ext[dni[0]])
                     if len(dni)==len([n for n in dni if n in numeros])and tabla[int(dni)%23]==dig_control:
                         var.ui.lblValidoDNI.setStyleSheet('QLabel{color:green;}')
-                        var.ui.lblValidoDNI.setText('Bien')
+                        var.ui.lblValidoDNI.setText('V')
                         var.ui.txtDNI.setStyleSheet("background-color:white;")
                         resultado=1
 
                     else:
                         var.ui.lblValidoDNI.setStyleSheet('QLabel{color:red;}')
-                        var.ui.lblValidoDNI.setText('Mal')
+                        var.ui.lblValidoDNI.setText('X')
                         var.ui.txtDNI.setStyleSheet("background-color:pink;")
             else:
                 var.ui.lblValidoDNI.setStyleSheet('QLabel{color:red;}')
-                var.ui.lblValidoDNI.setText('Mal')
+                var.ui.lblValidoDNI.setText('X')
                 var.ui.txtDNI.setStyleSheet("background-color:pink;")
         except Exception as error:
             print('Error en validar DNI')

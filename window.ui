@@ -81,7 +81,7 @@
      <widget class="QPushButton" name="btnSalir">
       <property name="geometry">
        <rect>
-        <x>600</x>
+        <x>570</x>
         <y>280</y>
         <width>75</width>
         <height>23</height>
@@ -174,72 +174,6 @@
           <attribute name="buttonGroup">
            <string notr="true">rbtGroupSex</string>
           </attribute>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget_9">
-       <property name="geometry">
-        <rect>
-         <x>290</x>
-         <y>20</y>
-         <width>421</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_9">
-        <item>
-         <widget class="QLabel" name="lblDNI">
-          <property name="text">
-           <string>DNI:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="txtDNI">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblValidoDNI">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblFecha">
-          <property name="text">
-           <string>Fecha Alta:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="txtFecha"/>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btnCalendar">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset>
-            <normaloff>img/calend.png</normaloff>img/calend.png</iconset>
-          </property>
          </widget>
         </item>
        </layout>
@@ -387,22 +321,71 @@
         </item>
        </layout>
       </widget>
-      <widget class="QPushButton" name="btnLimpiaFormCliente">
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
-         <x>100</x>
-         <y>0</y>
-         <width>21</width>
-         <height>21</height>
+         <x>312</x>
+         <y>19</y>
+         <width>408</width>
+         <height>26</height>
         </rect>
        </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>img/98865.png</normaloff>img/98865.png</iconset>
-       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="lblDNI">
+          <property name="text">
+           <string>DNI:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="txtDNI">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblValidoDNI">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblFecha">
+          <property name="text">
+           <string>Fecha Alta:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="txtFecha"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnCalendar">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>img/calend.png</normaloff>img/calend.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
      <widget class="Line" name="separadorSuperior">
@@ -421,7 +404,7 @@
      <widget class="QPushButton" name="btnGrabaCli">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>300</x>
         <y>280</y>
         <width>75</width>
         <height>23</height>
@@ -447,7 +430,7 @@
      <widget class="QPushButton" name="btnModifCli">
       <property name="geometry">
        <rect>
-        <x>420</x>
+        <x>390</x>
         <y>280</y>
         <width>75</width>
         <height>23</height>
@@ -460,7 +443,7 @@
      <widget class="QPushButton" name="btnBorraCli">
       <property name="geometry">
        <rect>
-        <x>510</x>
+        <x>480</x>
         <y>280</y>
         <width>75</width>
         <height>23</height>
@@ -468,6 +451,23 @@
       </property>
       <property name="text">
        <string>Eliminar Cli.</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnLimpiaFormCliente">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>280</y>
+        <width>21</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>img/98865.png</normaloff>img/98865.png</iconset>
       </property>
      </widget>
     </widget>
@@ -564,11 +564,11 @@
  <resources/>
  <connections/>
  <buttongroups>
+  <buttongroup name="rbtGroupSex"/>
   <buttongroup name="chkGroupPago">
    <property name="exclusive">
     <bool>false</bool>
    </property>
   </buttongroup>
-  <buttongroup name="rbtGroupSex"/>
  </buttongroups>
 </ui>

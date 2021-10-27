@@ -1,8 +1,14 @@
-import var
+import clients
+import conexion
+import var,events
 from window import *
+from PyQt5.QtWidgets import QMessageBox
+
 class Clientes():
     def validarDNI():
         try:
+            global resultado
+            resultado=0
             dni=var.ui.txtDNI.text()
             tabla='TRWAGMYFPDXBNJZSQVHLCKE' #Letras DNI
             dig_ext='XYZ'                   #Letras NIE
@@ -17,6 +23,9 @@ class Clientes():
                     if len(dni)==len([n for n in dni if n in numeros])and tabla[int(dni)%23]==dig_control:
                         var.ui.lblValidoDNI.setStyleSheet('QLabel{color:green;}')
                         var.ui.lblValidoDNI.setText('Bien')
+                        var.ui.txtDNI.setStyleSheet("background-color:white;")
+                        resultado=1
+
                     else:
                         var.ui.lblValidoDNI.setStyleSheet('QLabel{color:red;}')
                         var.ui.lblValidoDNI.setText('Mal')
@@ -27,27 +36,6 @@ class Clientes():
                 var.ui.txtDNI.setStyleSheet("background-color:pink;")
         except Exception as error:
             print('Error en validar DNI')
-    def selSexo(self):
-        try:
-            if var.ui.rbtFem.isChecked():
-                print('Femenino')
-            if var.ui.rbtMasc.isChecked():
-                print('Masculino')
-        except Exception as error:
-            print('Error en el modulo SelSexo')
-
-    def selPago(self):
-        try:
-            if var.ui.chkEfectivo.isChecked():
-                print('Efectivo')
-            if var.ui.chkTarjeta.isChecked():
-                print('Tarjeta')
-            if var.ui.chkCargoCuenta.isChecked():
-                print('CargoCuenta')
-            if var.ui.chkTrans.isChecked():
-                print('Transferencia')
-        except Exception as error:
-            print('Error en el modulo selPago')
 
     def cargaProv(self):
         try:
@@ -61,8 +49,6 @@ class Clientes():
     def selProv(prov):
         try:
             Clientes.cargaMun(prov)
-            print("Has seleccionado la provincia de "+prov)
-
         except Exception as error: print("Error en modulo selProv")
 
     def cargaMun(prov):
@@ -82,13 +68,6 @@ class Clientes():
                 var.ui.cmbMun.addItem(i)
         except Exception as error: print("Error en modulo cargaMun")
 
-    def selMun(mun):
-        try:
-
-            print("Has seleccionado el municipio de "+ mun)
-
-        except Exception as error: print("Error en modulo selMun")
-
     def cargarFecha(qDate):
         try:
             data=('{0}/{1}/{2}'.format(qDate.day(),qDate.month(),qDate.year()))
@@ -107,3 +86,97 @@ class Clientes():
             var.ui.txtDir.setText(textoDir.title())
         except Exception as error:
             print('Error en validar DNI')
+
+    def guardaCli(self):
+        Clientes.validarDNI()
+        if (resultado==1):
+            try:
+                #preparamos el registro
+                newCli=[]#para la bbdd
+                cliente=[var.ui.txtDNI, var.ui.txtFecha, var.ui.txtNome, var.ui.txtApel,  var.ui.txtDir]
+                tabCli=[]  # para la tablaWidget
+                #recogemos datos
+                client=[var.ui.txtDNI, var.ui.txtFecha, var.ui.txtNome, var.ui.txtApel]
+                for i in cliente:
+                    newCli.append(i.text())
+                for i in client:
+                    tabCli.append(i.text())
+                newCli.append(var.ui.cmbProv.currentText())
+                newCli.append(var.ui.cmbMun.currentText())
+                if var.ui.rbtMasc.isChecked():
+                    newCli.append('Hombre')
+                else:
+                    newCli.append('Mujer')
+                pagos=[]
+                if var.ui.chkEfectivo.isChecked():
+                    pagos.append('Efctv ')
+                if var.ui.chkTarjeta.isChecked():
+                    pagos.append('Trjt ')
+                if var.ui.chkCargoCuenta.isChecked():
+                    pagos.append('CrgCnt')
+                if var.ui.chkTrans.isChecked():
+                    pagos.append('Trfr')
+                tabCli.append('; '.join(pagos))
+                newCli.append(';'.join(pagos))
+                # Cargamos en la tabla
+                row = 0
+                column = 0
+                var.ui.tabClientes.insertRow(row)
+                for campo in tabCli:
+                    cell = QtWidgets.QTableWidgetItem(str(campo))
+                    var.ui.tabClientes.setItem(row, column, cell)
+                    column += 1
+                print(newCli)
+                conexion.Conexion.altaCli(newCli)
+                Clientes.limpiaFormCli(self)
+            except Exception as error:
+                print('Error en guardar clientes')
+        else:
+            popup = QtWidgets.QMessageBox()
+            popup.setWindowTitle('Error')
+            popup.setText('DNI invalido')
+            popup.setIcon(QtWidgets.QMessageBox.Warning)
+            popup.exec()
+    def limpiaFormCli(self):
+        try:
+            registros=[var.ui.txtDNI, var.ui.txtNome, var.ui.txtApel, var.ui.txtFecha, var.ui.txtDir]
+            for i in registros:
+                i.setText('')
+            var.ui.lblValidoDNI.setText('')
+            var.ui.txtDNI.setStyleSheet("background-color:white;")
+            var.ui.rbtGroupSex.setExclusive(False)
+            var.ui.rbtFem.setChecked(False)
+            var.ui.rbtMasc.setChecked(False)
+            var.ui.rbtGroupSex.setExclusive(True)
+
+            var.ui.chkCargoCuenta.setChecked(False)
+            var.ui.chkTrans.setChecked(False)
+            var.ui.chkTarjeta.setChecked(False)
+            var.ui.chkEfectivo.setChecked(False)
+
+            var.ui.cmbProv.setCurrentIndex(0)
+            var.ui.cmbMun.setCurrentIndex(0)
+
+
+        except Exception as error:
+            print('Error en limpiar formulario')
+
+    def cargaCLi(self):
+        try:
+            fila=var.ui.tabClientes.selectedItems()
+            datos=[var.ui.txtDNI,var.ui.txtApel,var.ui.txtNome,var.ui.txtFecha]
+            if fila:
+                row=[dato.text() for dato in fila]
+            for i, dato in enumerate(datos):
+                dato.setText(row[i])
+
+            if 'Efctv' in row[4]:
+                var.ui.chkEfectivo.setChecked(True)
+            if 'Trfr' in row[4]:
+                var.ui.chkTrans.setChecked(True)
+            if 'Trjt' in row[4]:
+                var.ui.chkTarjeta.setChecked(True)
+            if 'CrgCnt' in row[4]:
+                var.ui.chkCargoCuenta.setChecked(True)
+        except Exception as error:
+            print('Error al cargar datos de un cliente')

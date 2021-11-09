@@ -321,7 +321,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>312</x>
@@ -507,6 +507,22 @@
       </property>
      </widget>
     </widget>
+   </widget>
+   <widget class="QLabel" name="lblFecha_2">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>680</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

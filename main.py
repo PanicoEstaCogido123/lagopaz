@@ -1,10 +1,13 @@
+import locale
+
 import clients
 import conexion
 from window import *
 from windowaviso import *
 from windowcal import *
 from datetime import *
-import sys,var,events
+import sys,var,events,locale
+locale.setlocale(locale.LC_ALL,'es-ES')
 
 class DialogAviso(QtWidgets.QDialog):
     def __init__(self):
@@ -41,6 +44,8 @@ class Main(QtWidgets.QMainWindow):
         var.ui.btnGrabaCli.clicked.connect(clients.Clientes.guardaCli)
         var.ui.btnSalir.clicked.connect(events.Eventos.Salir)
         var.ui.btnCalendar.clicked.connect(events.Eventos.abrircal)
+        var.ui.btnBorraCli.clicked.connect(conexion.Conexion.bajaCli)
+        var.ui.btnModifCli.clicked.connect(clients.Clientes.modifCli)
         '''
         Eventos de menus
         '''
@@ -52,18 +57,28 @@ class Main(QtWidgets.QMainWindow):
         var.ui.txtApel.editingFinished.connect(clients.Clientes.letraCapital)
         var.ui.txtNome.editingFinished.connect(clients.Clientes.letraCapital)
         var.ui.txtDir.editingFinished.connect(clients.Clientes.letraCapital)
+
+        '''
+        Eventos QtabWidgets
+        '''
+        events.Eventos.resizeTablaCli(self)
+        var.ui.tabClientes.clicked.connect(clients.Clientes.limpiaFormCli)
+        var.ui.tabClientes.clicked.connect(clients.Clientes.cargaCLi)
+        var.ui.tabClientes.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
+        conexion.Conexion.db_connect((var.filedb))
+        conexion.Conexion.cargarTabCli()
         '''
         Eventos combobox
         '''
         clients.Clientes.cargaProv(self)
         var.ui.cmbProv.activated[str].connect(clients.Clientes.selProv)
+
         '''
-        Eventos QtabWidgets
+        Barra de estado
         '''
-        events.Eventos.resizeTablaCli(self)
-        var.ui.tabClientes.clicked.connect(clients.Clientes.cargaCLi)
-        var.ui.tabClientes.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
-        conexion.Conexion.db_connect((var.filedb))
+        var.ui.statusbar.addPermanentWidget(var.ui.lblFecha_2,1)
+        day=datetime.now()
+        var.ui.lblFecha_2.setText(day.strftime('%A, %d de %B de %Y').capitalize())
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])

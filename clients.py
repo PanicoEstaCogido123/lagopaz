@@ -48,10 +48,36 @@ class Clientes():
 
     def selProv(prov):
         try:
-            Clientes.cargaMun(prov)
-        except Exception as error: print("Error en modulo selProv")
+            clients.Clientes.cargaMun(prov)
+        except Exception as error:
+            print("Error en modulo selProv")
 
     def cargaMun(prov):
+        try:
+            var.ui.cmbMun.clear()
+            if prov == "Vigo":
+                mun = [" ", "Vigo", "Redondela", "Ponteareas", "Cangas"]
+            if prov == "A Coruña":
+                mun = [" ", "A Coruña", "Ferrol", "Betanzos", "Santiago"]
+            if prov == "Pontevedra":
+                mun = [" ", "Pontevedra", "Moaña", "Lalín", "A Cañiza"]
+            if prov == "Ourense":
+                mun = [" ", "Ourense", "O Barco", "Monforte", "Verin"]
+            if prov == "Lugo":
+                mun = [" ", "Lugo", "Sarria", "Villalba", "Ribadeo"]
+            for i in mun:
+                var.ui.cmbMun.addItem(i)
+        except Exception as error:
+            print("Error en modulo cargaMun", error)
+
+
+    '''
+        def selProv(prov):
+        try:
+            Clientes.cargaMun(prov)
+        except Exception as error: print("Error en modulo selProv")
+        
+        def cargaMun(prov):
         try:
             var.ui.cmbMun.clear()
             if prov == "Vigo":
@@ -67,6 +93,7 @@ class Clientes():
             for i in mun:
                 var.ui.cmbMun.addItem(i)
         except Exception as error: print("Error en modulo cargaMun")
+    '''
 
     def cargarFecha(qDate):
         try:
@@ -93,7 +120,7 @@ class Clientes():
             try:
                 #preparamos el registro
                 newCli=[]#para la bbdd
-                cliente=[var.ui.txtDNI, var.ui.txtFecha, var.ui.txtNome, var.ui.txtApel,  var.ui.txtDir]
+                cliente=[var.ui.txtDNI, var.ui.txtFecha, var.ui.txtNome, var.ui.txtApel, var.ui.txtDir]
                 tabCli=[]  # para la tablaWidget
                 #recogemos datos
                 client=[var.ui.txtDNI, var.ui.txtFecha, var.ui.txtNome, var.ui.txtApel]
@@ -119,18 +146,12 @@ class Clientes():
                 tabCli.append('; '.join(pagos))
                 newCli.append(';'.join(pagos))
                 # Cargamos en la tabla
-                row = 0
-                column = 0
-                var.ui.tabClientes.insertRow(row)
-                for campo in tabCli:
-                    cell = QtWidgets.QTableWidgetItem(str(campo))
-                    var.ui.tabClientes.setItem(row, column, cell)
-                    column += 1
-                print(newCli)
+
                 conexion.Conexion.altaCli(newCli)
+                conexion.Conexion.cargarTabCli()
                 Clientes.limpiaFormCli(self)
             except Exception as error:
-                print('Error en guardar clientes')
+                print('Error en guardar clientes',error)
         else:
             popup = QtWidgets.QMessageBox()
             popup.setWindowTitle('Error')
@@ -164,7 +185,7 @@ class Clientes():
     def cargaCLi(self):
         try:
             fila=var.ui.tabClientes.selectedItems()
-            datos=[var.ui.txtDNI,var.ui.txtApel,var.ui.txtNome,var.ui.txtFecha]
+            datos=[var.ui.txtDNI,var.ui.txtNome,var.ui.txtApel,var.ui.txtFecha]
             if fila:
                 row=[dato.text() for dato in fila]
             for i, dato in enumerate(datos):
@@ -178,5 +199,40 @@ class Clientes():
                 var.ui.chkTarjeta.setChecked(True)
             if 'CrgCnt' in row[4]:
                 var.ui.chkCargoCuenta.setChecked(True)
+            registro=conexion.Conexion.oneCli(row[0])
+            var.ui.txtDir.setText(str(registro[0]))
+            var.ui.cmbProv.setCurrentText(str(registro[1]))
+            var.ui.cmbMun.setCurrentText(str(registro[2]))
+            if str(registro[3])=='Hombre':
+                var.ui.rbtMasc.setChecked(True)
+            elif str(registro[3])=='Mujer':
+                var.ui.rbtFem.setChecked(True)
         except Exception as error:
             print('Error al cargar datos de un cliente')
+
+    def modifCli(self):
+        try:
+            modcliente = []
+            cliente = [var.ui.txtDNI, var.ui.txtFecha,  var.ui.txtApel, var.ui.txtNome, var.ui.txtDir]
+            for i in cliente:
+                modcliente.append(i.text())
+            modcliente.append(var.ui.cmbProv.currentText())
+            modcliente.append(var.ui.cmbMun.currentText())
+            if var.ui.rbtMasc.isChecked():
+                modcliente.append('Hombre')
+            else:
+                modcliente.append('Mujer')
+            pagos = []
+            if var.ui.chkEfectivo.isChecked():
+                pagos.append('Efctv ')
+            if var.ui.chkTarjeta.isChecked():
+                pagos.append('Trjt ')
+            if var.ui.chkCargoCuenta.isChecked():
+                pagos.append('CrgCnt')
+            if var.ui.chkTrans.isChecked():
+                pagos.append('Trfr')
+            modcliente.append(';'.join(pagos))
+            conexion.Conexion.modifCli(modcliente)
+            print(modcliente)
+        except Exception as error:
+            print('Error en modifCli', error)

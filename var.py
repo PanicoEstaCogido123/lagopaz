@@ -1,9 +1,3 @@
-'''
-
-Variables de ventana
-
-'''
-global ui
-global dlgaviso
-global dlgcalendar
+#Variables de ventana
+global ui, dlgaviso, dlgcalendar, dlgabrir, copia
 filedb='bbdd.db'

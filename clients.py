@@ -1,8 +1,6 @@
-import clients
-import conexion
-import var,events
+import conexion, var
 from window import *
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5 import QtSql
 
 class Clientes():
     def validarDNI():
@@ -25,7 +23,6 @@ class Clientes():
                         var.ui.lblValidoDNI.setText('V')
                         var.ui.txtDNI.setStyleSheet("background-color:white;")
                         resultado=1
-
                     else:
                         var.ui.lblValidoDNI.setStyleSheet('QLabel{color:red;}')
                         var.ui.lblValidoDNI.setText('X')
@@ -37,63 +34,21 @@ class Clientes():
         except Exception as error:
             print('Error en validar DNI')
 
-    def cargaProv(self):
+    def cargaProv(prov):
         try:
             var.ui.cmbProv.clear()
-            prov=[" ","A Coruña","Lugo","Ourense","Pontevedra","Vigo"]
             for i in prov:
                 var.ui.cmbProv.addItem(i)
-
-        except Exception as error: print("Error en modulo cargaProv")
-
-    def selProv(prov):
-        try:
-            clients.Clientes.cargaMun(prov)
         except Exception as error:
-            print("Error en modulo selProv")
+            print("Error en modulo cargaProv")
 
-    def cargaMun(prov):
+    def cargaMun(mun):
         try:
             var.ui.cmbMun.clear()
-            if prov == "Vigo":
-                mun = [" ", "Vigo", "Redondela", "Ponteareas", "Cangas"]
-            if prov == "A Coruña":
-                mun = [" ", "A Coruña", "Ferrol", "Betanzos", "Santiago"]
-            if prov == "Pontevedra":
-                mun = [" ", "Pontevedra", "Moaña", "Lalín", "A Cañiza"]
-            if prov == "Ourense":
-                mun = [" ", "Ourense", "O Barco", "Monforte", "Verin"]
-            if prov == "Lugo":
-                mun = [" ", "Lugo", "Sarria", "Villalba", "Ribadeo"]
             for i in mun:
                 var.ui.cmbMun.addItem(i)
         except Exception as error:
-            print("Error en modulo cargaMun", error)
-
-
-    '''
-        def selProv(prov):
-        try:
-            Clientes.cargaMun(prov)
-        except Exception as error: print("Error en modulo selProv")
-        
-        def cargaMun(prov):
-        try:
-            var.ui.cmbMun.clear()
-            if prov == "Vigo":
-                mun=[" ","Vigo","Redondela","Ponteareas","Cangas"]
-            if prov == "A Coruña":
-                mun=[" ","A Coruña","Ferrol","Betanzos","Santiago"]
-            if prov == "Pontevedra":
-                mun=[" ","Pontevedra","Moaña","Lalín","A Cañiza"]
-            if prov == "Ourense":
-                mun=[" ","Ourense","O Barco","Monforte","Verin"]
-            if prov== "Lugo":
-                mun=[" ","Lugo","Sarria","Villalba","Ribadeo"]
-            for i in mun:
-                var.ui.cmbMun.addItem(i)
-        except Exception as error: print("Error en modulo cargaMun")
-    '''
+            print("Error en modulo cargaMun")
 
     def cargarFecha(qDate):
         try:
@@ -146,7 +101,6 @@ class Clientes():
                 tabCli.append('; '.join(pagos))
                 newCli.append(';'.join(pagos))
                 # Cargamos en la tabla
-
                 conexion.Conexion.altaCli(newCli)
                 conexion.Conexion.cargarTabCli()
                 Clientes.limpiaFormCli(self)
@@ -158,6 +112,7 @@ class Clientes():
             popup.setText('DNI invalido')
             popup.setIcon(QtWidgets.QMessageBox.Warning)
             popup.exec()
+
     def limpiaFormCli(self):
         try:
             registros=[var.ui.txtDNI, var.ui.txtNome, var.ui.txtApel, var.ui.txtFecha, var.ui.txtDir]
@@ -169,46 +124,54 @@ class Clientes():
             var.ui.rbtFem.setChecked(False)
             var.ui.rbtMasc.setChecked(False)
             var.ui.rbtGroupSex.setExclusive(True)
-
             var.ui.chkCargoCuenta.setChecked(False)
             var.ui.chkTrans.setChecked(False)
             var.ui.chkTarjeta.setChecked(False)
             var.ui.chkEfectivo.setChecked(False)
-
             var.ui.cmbProv.setCurrentIndex(0)
             var.ui.cmbMun.setCurrentIndex(0)
-
-
         except Exception as error:
             print('Error en limpiar formulario')
 
-    def cargaCLi(self):
+    def cargaCli(self):
         try:
-            fila=var.ui.tabClientes.selectedItems()
-            datos=[var.ui.txtDNI,var.ui.txtNome,var.ui.txtApel,var.ui.txtFecha]
+            var.ui.chkEfectivo.setChecked(False)
+            var.ui.chkTarjeta.setChecked(False)
+            var.ui.chkCargoCuenta.setChecked(False)
+            var.ui.chkTrans.setChecked(False)
+            fila = var.ui.tabClientes.selectedItems()
             if fila:
-                row=[dato.text() for dato in fila]
-            for i, dato in enumerate(datos):
-                dato.setText(row[i])
-
-            if 'Efctv' in row[4]:
-                var.ui.chkEfectivo.setChecked(True)
-            if 'Trfr' in row[4]:
-                var.ui.chkTrans.setChecked(True)
-            if 'Trjt' in row[4]:
-                var.ui.chkTarjeta.setChecked(True)
-            if 'CrgCnt' in row[4]:
-                var.ui.chkCargoCuenta.setChecked(True)
-            registro=conexion.Conexion.oneCli(row[0])
-            var.ui.txtDir.setText(str(registro[0]))
-            var.ui.cmbProv.setCurrentText(str(registro[1]))
-            var.ui.cmbMun.setCurrentText(str(registro[2]))
-            if str(registro[3])=='Hombre':
-                var.ui.rbtMasc.setChecked(True)
-            elif str(registro[3])=='Mujer':
-                var.ui.rbtFem.setChecked(True)
-        except Exception as error:
-            print('Error al cargar datos de un cliente')
+                row = [dato.text() for dato in fila]
+                dni = row[0]
+                query = QtSql.QSqlQuery()
+                query.prepare(
+                    'SELECT dni, alta, apellidos, nombre, direccion, provincia, municipio, sexo, pagos FROM CLIENTES WHERE dni="' + dni + '"')
+                if query.exec_():
+                    while query.next():
+                        dni = query.value(0)
+                        alta = query.value(1)
+                        apellidos = query.value(2)
+                        nombre = query.value(3)
+                        direccion = query.value(4)
+                        provincia = query.value(5)
+                        conexion.Conexion.CargaMun(provincia)
+                        municipio = query.value(6)
+                        sexo = query.value(7)
+                        pago = query.value(8)
+                var.ui.txtDNI.setText(dni)
+                var.ui.txtApel.setText(apellidos)
+                var.ui.txtNome.setText(nombre)
+                var.ui.txtFecha.setText(alta)
+                var.ui.txtDir.setText(direccion)
+                var.ui.cmbProv.setCurrentText(provincia)
+                var.ui.cmbMun.setCurrentText(municipio)
+                if "Hombre" in sexo: var.ui.rbtMasc.setChecked(True)
+                if "Mujer" in sexo: var.ui.rbtFem.setChecked(True)
+                if "CrgCnt" in pago: var.ui.chkCargoCuenta.setChecked(True)
+                if "Efctv" in pago: var.ui.chkEfectivo.setChecked(True)
+                if "Trjt" in pago: var.ui.chkTarjeta.setChecked(True)
+                if "Trfr" in pago: var.ui.chkTrans.setChecked(True)
+        except Exception as error: print("Error en modulo CargaCli",error)
 
     def modifCli(self):
         try:

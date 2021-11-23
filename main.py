@@ -1,5 +1,4 @@
-import clients, conexion, sys,var,events,locale
-import event
+import clients, conexion, sys, var, events, locale
 from window import *
 from windowaviso import *
 from windowcal import *
@@ -50,6 +49,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionAbrir.triggered.connect(events.Eventos.Abrir)
         var.ui.actionCrear_Backup.triggered.connect(events.Eventos.crearBackup)
         var.ui.actionRestaurar_BBDD.triggered.connect(events.Eventos.restaurarBackup)
+        var.ui.actionImportar_Datos.triggered.connect(conexion.Conexion.cargarExcel)
         var.ui.actionbarSalir.triggered.connect(events.Eventos.Salir)
         var.ui.actionbarAbrirCarpeta.triggered.connect(events.Eventos.Abrir)
         var.ui.actionbarCrearBackup.triggered.connect(events.Eventos.crearBackup)
@@ -62,6 +62,7 @@ class Main(QtWidgets.QMainWindow):
         var.ui.txtApel.editingFinished.connect(clients.Clientes.letraCapital)
         var.ui.txtNome.editingFinished.connect(clients.Clientes.letraCapital)
         var.ui.txtDir.editingFinished.connect(clients.Clientes.letraCapital)
+        var.ui.sBoxEnvio.valueChanged.connect(clients.Clientes.actualizarEnvio)
         '''
         Eventos QtabWidgets
         '''

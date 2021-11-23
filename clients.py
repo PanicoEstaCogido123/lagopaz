@@ -6,8 +6,38 @@ class Clientes():
     def validarDNI():
         try:
             global resultado
+            resultado = 0
+            dni = var.ui.txtDNI.text()
+            tabla = 'TRWAGMYFPDXBNJZSQVHLCKE'  # Letras DNI
+            dig_ext = 'XYZ'  # Letras NIE
+            reemp_dig_ext = {'X': '0', 'Y': '1', 'Z': '2'}
+            numeros = '1234567890'
+            dni = dni.upper()  # Convertir a mayusculas
+            if len(dni) == 9:
+                dig_control = dni[8]
+                dni = dni[:8]
+                if dni[0] in dig_ext:
+                    dni = dni.replace(dni[0], reemp_dig_ext[dni[0]])
+                if len(dni) == len([n for n in dni if n in numeros]) and tabla[int(dni) % 23] == dig_control:
+                    var.ui.lblValidoDNI.setStyleSheet('QLabel{color:green;}')
+                    var.ui.lblValidoDNI.setText('V')
+                    var.ui.txtDNI.setStyleSheet("background-color:white;")
+                    resultado = 1
+                else:
+                    var.ui.lblValidoDNI.setStyleSheet('QLabel{color:red;}')
+                    var.ui.lblValidoDNI.setText('X')
+                    var.ui.txtDNI.setStyleSheet("background-color:pink;")
+            else:
+                var.ui.lblValidoDNI.setStyleSheet('QLabel{color:red;}')
+                var.ui.lblValidoDNI.setText('X')
+                var.ui.txtDNI.setStyleSheet("background-color:pink;")
+        except Exception as error:
+            print('Error en validar DNI')
+
+    def validarDNI(dni):
+        try:
             resultado=0
-            dni=var.ui.txtDNI.text()
+            dni=dni
             tabla='TRWAGMYFPDXBNJZSQVHLCKE' #Letras DNI
             dig_ext='XYZ'                   #Letras NIE
             reemp_dig_ext={'X':'0','Y':'1','Z':'2'}
@@ -19,20 +49,14 @@ class Clientes():
                     if dni[0] in dig_ext:
                         dni=dni.replace(dni[0],reemp_dig_ext[dni[0]])
                     if len(dni)==len([n for n in dni if n in numeros])and tabla[int(dni)%23]==dig_control:
-                        var.ui.lblValidoDNI.setStyleSheet('QLabel{color:green;}')
-                        var.ui.lblValidoDNI.setText('V')
-                        var.ui.txtDNI.setStyleSheet("background-color:white;")
                         resultado=1
+                        return resultado
                     else:
-                        var.ui.lblValidoDNI.setStyleSheet('QLabel{color:red;}')
-                        var.ui.lblValidoDNI.setText('X')
-                        var.ui.txtDNI.setStyleSheet("background-color:pink;")
+                        return resultado
             else:
-                var.ui.lblValidoDNI.setStyleSheet('QLabel{color:red;}')
-                var.ui.lblValidoDNI.setText('X')
-                var.ui.txtDNI.setStyleSheet("background-color:pink;")
+                return resultado
         except Exception as error:
-            print('Error en validar DNI')
+            print('Error en validar DNIexcel', error)
 
     def cargaProv(prov):
         try:
@@ -91,7 +115,7 @@ class Clientes():
                     newCli.append('Mujer')
                 pagos=[]
                 if var.ui.chkEfectivo.isChecked():
-                    pagos.append('Efctv ')
+                    pagos.append('Efctv')
                 if var.ui.chkTarjeta.isChecked():
                     pagos.append('Trjt ')
                 if var.ui.chkCargoCuenta.isChecked():
@@ -199,3 +223,16 @@ class Clientes():
             print(modcliente)
         except Exception as error:
             print('Error en modifCli', error)
+
+    def actualizarEnvio(self):
+        try:
+            if var.ui.sBoxEnvio.value()==0:
+                var.ui.lblEnvio.setText("Recogida por cliente")
+            if var.ui.sBoxEnvio.value()==1:
+                var.ui.lblEnvio.setText("Envío Nacional Paquetería Express Urgente")
+            if var.ui.sBoxEnvio.value()==2:
+                var.ui.lblEnvio.setText("Envío Nacional Paquetería Norma")
+            if var.ui.sBoxEnvio.value()==3:
+                var.ui.lblEnvio.setText("Envío Interncional")
+        except Exception as error:
+            print('Error en actualizarEnvio', error)

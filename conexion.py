@@ -1,8 +1,9 @@
 from PyQt5 import QtSql
 from PyQt5 import QtWidgets
 
-import clients
-import var
+import clients, xlrd, var
+import conexion
+
 
 class Conexion():
     def db_connect(filename):
@@ -216,3 +217,23 @@ class Conexion():
             msgBox.setIcon((QtWidgets.QMessageBox.Warning))
             msgBox.setText("Error al cargar provincias de la BD")
             msgBox.exec()
+
+    def cargarExcel():
+        try:
+            book = xlrd.open_workbook("DATOSCLIENTES.xls")
+            sheet = book.sheet_by_name("Folla1")
+            for r in range(1, sheet.nrows):
+                dni = sheet.cell(r,0).value
+                alta = municipio = sheet.cell(r,1).value
+                apellidos = sheet.cell(r,2).value
+                nombre = sheet.cell(r,3).value
+                direccion = sheet.cell(r,4).value
+                provincia = sheet.cell(r,5).value
+                municipio = sheet.cell(r,6).value
+                sexo = sheet.cell(r,7).value
+                pagos = sheet.cell(r,8).value
+                newCli=[dni,alta, nombre, apellidos, direccion, provincia,municipio, sexo, pagos]
+                if(clients.Clientes.validarDNI(newCli[0])):
+                    conexion.Conexion.altaCli(newCli)
+        except Exception as error:
+            print('Error en cargarExcel', error)

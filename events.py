@@ -1,8 +1,9 @@
-import os.path, sys, var, shutil, zipfile
+import os.path, sys, shutil, zipfile
+from img import var
 
 import conexion
 from window import*
-from datetime import date, datetime
+from datetime import datetime
 from PyQt5 import  QtPrintSupport
 
 class Eventos():
@@ -20,7 +21,8 @@ class Eventos():
         try:
             var.dlgcalendar.show()
         except Exception as error:
-            print('Error en el modulo abrircal ',error)
+            print('Error en el modulo abrircal ', error)
+
 
     def resizeTablaCli(self):
         header = var.ui.tabClientes.horizontalHeader()
@@ -39,21 +41,21 @@ class Eventos():
         try:
             fecha = datetime.today()
             fecha = fecha.strftime('%Y.%m.%d.%H.%M.%S')
-            var.copia = str((fecha)+'_backup.zip')
+            var.copia = str((fecha) + '_backup.zip')
             option = QtWidgets.QFileDialog.Option()
-            directorio, filename=var.dlgabrir.getSaveFileName(None,'Guardar Copia', var.copia,'.zip',options=option)
+            directorio, filename= var.dlgabrir.getSaveFileName(None, 'Guardar Copia', var.copia, '.zip', options=option)
             if var.dlgabrir.Accepted and filename != '':
-                fichzip=zipfile.ZipFile(var.copia,'w')
-                fichzip.write(var.filedb,os.path.basename(var.filedb),zipfile.ZIP_DEFLATED)
+                fichzip=zipfile.ZipFile(var.copia, 'w')
+                fichzip.write(var.filedb, os.path.basename(var.filedb), zipfile.ZIP_DEFLATED)
                 fichzip.close()
-                shutil.move(str(var.copia),str(directorio))
+                shutil.move(str(var.copia), str(directorio))
         except Exception as error:
             print('Error en crearBackup', error)
 
     def restaurarBackup(self):
         try:
             option = QtWidgets.QFileDialog.Option()
-            filename = var.dlgabrir.getOpenFileName(None,"Restaurar Copia de Seguridade","","*zip",options=option)
+            filename = var.dlgabrir.getOpenFileName(None, "Restaurar Copia de Seguridade", "", "*zip", options=option)
             if var.dlgabrir.Accepted and filename != "":
                 file=filename[0]
                 print(file)

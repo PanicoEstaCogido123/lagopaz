@@ -1,4 +1,5 @@
 #Variables de ventana
+
 from main import FileDialogAbrir
 from window import Ui_MainWindow
 from windowcal import Ui_windowcal

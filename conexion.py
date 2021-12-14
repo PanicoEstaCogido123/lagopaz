@@ -1,8 +1,13 @@
+from datetime import datetime
+
+import xlwt as xlwt
 from PyQt5 import QtSql
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 
-import clients, xlrd, var
-import conexion
+import xlrd
+from img import var
+import clients
 
 
 class Conexion():
@@ -18,6 +23,132 @@ class Conexion():
                 return True
         except Exception as error:
             print('Error en conexion con bbdd', error)
+    '''
+    Gestion BBDD articulo
+    '''
+    def altaArt(newArt):
+        if var.ui.lblid.text()== "":
+            try:
+                query = QtSql.QSqlQuery()
+                query.prepare('insert into articulos (nombre, precio) VALUES (:nombre, :precio)')
+                query.bindValue(':nombre', str(newArt[0]).lower())
+                query.bindValue(':precio', newArt[1])
+                if query.exec_():
+                    print('Inserción correcta')
+                    popup = QtWidgets.QMessageBox()
+                    popup.setWindowTitle('Aviso')
+                    popup.setText('Articulo dado de alta')
+                    popup.setIcon(QtWidgets.QMessageBox.Information)
+                    popup.exec()
+                else:
+                    print('Error:', query.lastError().text())
+                    msgBox = QtWidgets.QMessageBox()
+                    msgBox.setWindowTitle("Aviso")
+                    msgBox.setIcon((QtWidgets.QMessageBox.Warning))
+                    msgBox.setText("El articulo no ha sido guardado en la BD")
+                    msgBox.exec()
+            except Exception as error:
+                print('Problemas alta articulo', error)
+                msgBox = QtWidgets.QMessageBox()
+                msgBox.setWindowTitle("Aviso")
+                msgBox.setIcon((QtWidgets.QMessageBox.Warning))
+                msgBox.setText("Error al guardar el articulo en la BD")
+                msgBox.exec()
+        else:
+            popup = QtWidgets.QMessageBox()
+            popup.setWindowTitle('Aviso')
+            popup.setText('Estás trabajando con un artículo seleccionado. \nPara guardar un nuevo artículo deselecciona el \n actual pulsando el boton "resetear"')
+            popup.setIcon(QtWidgets.QMessageBox.Information)
+            popup.exec()
+
+    def cargarTabArt():
+        try:
+            index = 0
+            query = QtSql.QSqlQuery()
+            query.prepare('select codigo, nombre, precio from articulos order by nombre')
+            if query.exec_():
+                while query.next():
+                    codigo = str(query.value(0))
+                    nombre = query.value(1)
+                    nombre = nombre.lower()
+                    precio = query.value(2)
+                    var.ui.tabArticulos.setRowCount(index + 1) #creamos la fila y luego cargamos datos
+                    var.ui.tabArticulos.setItem(index, 0, QtWidgets.QTableWidgetItem(codigo))
+                    var.ui.tabArticulos.setItem(index, 1, QtWidgets.QTableWidgetItem(nombre))
+                    var.ui.tabArticulos.setItem(index, 2, QtWidgets.QTableWidgetItem(precio + "€"))
+                    index += 1
+        except Exception as error:
+            print('Problemas mostrar tabla articulos', error)
+
+    def bajaArt():
+        codigo = var.ui.lblid.text()
+        try:
+            query=QtSql.QSqlQuery()
+            query.prepare('delete from articulos where codigo = :codigo')
+            query.bindValue(':codigo',str(codigo))
+
+            if query.exec_():
+                popup = QtWidgets.QMessageBox()
+                popup.setWindowTitle('Aviso')
+                popup.setText('Articulo dado de baja')
+                popup.setIcon(QtWidgets.QMessageBox.Information)
+                popup.exec()
+            else:
+                print('Error:', query.lastError().text())
+                msgBox = QtWidgets.QMessageBox()
+                msgBox.setWindowTitle("Aviso")
+                msgBox.setIcon((QtWidgets.QMessageBox.Warning))
+                msgBox.setText("El articulo no ha sido dado de baja en la BD")
+                msgBox.exec()
+            Conexion.cargarTabArt()
+        except Exception as error:
+            print('Error en bajaArt', error)
+
+    def modifArt():
+        try:
+            query = QtSql.QSqlQuery()
+            query.prepare('update articulos set nombre=:nombre, precio=:precio where codigo = :codigo')
+            query.bindValue(':nombre', var.ui.txtNombreArticulo.text().lower())
+            query.bindValue(':precio', var.ui.txtPrecioArticulo.text())
+            query.bindValue(':codigo', var.ui.lblid.text())
+            print(var.ui.lblid.text())
+            if query.exec_():
+                popup = QtWidgets.QMessageBox()
+                popup.setWindowTitle('Aviso')
+                popup.setText('Articulo modificado')
+                popup.setIcon(QtWidgets.QMessageBox.Information)
+                popup.exec()
+            else:
+                print('Error al ejecutar query:', query.lastError().text())
+                msgBox = QtWidgets.QMessageBox()
+                msgBox.setWindowTitle("Aviso")
+                msgBox.setIcon((QtWidgets.QMessageBox.Warning))
+                msgBox.setText("Error al modificar el articulo")
+                msgBox.exec()
+            Conexion.cargarTabCli()
+            Conexion.cargarTabArt()
+        except Exception as error: print("Error en modulo modifart", error)
+
+    def buscarArt():
+        try:
+            index = 0
+            query = QtSql.QSqlQuery()
+            query.prepare('select codigo, nombre, precio from articulos where nombre = :nombre')
+            query.bindValue(':nombre', var.ui.txtNombreArticulo.text())
+            if query.exec_():
+                print("funciona")
+                while query.next():
+                    codigo = str(query.value(0))
+                    nombre = query.value(1)
+                    nombre = nombre.lower()
+                    precio = query.value(2)
+                    var.ui.tabArticulos.setRowCount(index + 1)  # creamos la fila y luego cargamos datos
+                    var.ui.tabArticulos.setItem(index, 0, QtWidgets.QTableWidgetItem(codigo))
+                    var.ui.tabArticulos.setItem(index, 1, QtWidgets.QTableWidgetItem(nombre))
+                    var.ui.tabArticulos.setItem(index, 2, QtWidgets.QTableWidgetItem(precio + "€"))
+                    index += 1
+        except Exception as error:
+            print('Problemas mostrar tabla busqueda articulos', error)
     '''
     Gestion BBDD cliente
     '''
@@ -110,8 +241,8 @@ class Conexion():
                     nombre = query.value(1)
                     alta = query.value(3)
                     pago = query.value(4)
-                    var.ui.tabClientes.setRowCount(index+1) #creamos la fila y luego cargamos datos
-                    var.ui.tabClientes.setItem(index,0,QtWidgets.QTableWidgetItem(dni))
+                    var.ui.tabClientes.setRowCount(index + 1) #creamos la fila y luego cargamos datos
+                    var.ui.tabClientes.setItem(index, 0, QtWidgets.QTableWidgetItem(dni))
                     var.ui.tabClientes.setItem(index, 1, QtWidgets.QTableWidgetItem(apellidos))
                     var.ui.tabClientes.setItem(index, 2, QtWidgets.QTableWidgetItem(nombre))
                     var.ui.tabClientes.setItem(index, 3, QtWidgets.QTableWidgetItem(alta))
@@ -220,7 +351,7 @@ class Conexion():
 
     def cargarExcel():
         try:
-            book = xlrd.open_workbook("DATOSCLIENTES.xls")
+            book = xlrd.open_workbook("img/DATOSCLIENTES.xls")
             sheet = book.sheet_by_name("Folla1")
             for r in range(1, sheet.nrows):
                 dni = sheet.cell(r,0).value
@@ -237,3 +368,53 @@ class Conexion():
                     conexion.Conexion.altaCli(newCli)
         except Exception as error:
             print('Error en cargarExcel', error)
+
+    def ExportarExcel(self):
+        try:
+            conexion.Conexion.exportExcel(self)
+            try:
+                msgBox = QMessageBox()
+                msgBox.setIcon(QtWidgets.QMessageBox.Information)
+                msgBox.setText("Datos exportados con éxito.")
+                msgBox.setWindowTitle("Operación completada")
+                msgBox.setStandardButtons(QMessageBox.Ok)
+                msgBox.exec()
+            except Exception as error:
+                print('Error en mensaje generado exportar datos ', error)
+        except Exception as error:
+            print('Error en evento exportar datos ',error)
+
+    def exportExcel(self):
+        try:
+            fecha = datetime.today()
+            fecha = fecha.strftime('%Y.%m.%d.%H.%M.%S')
+            var.copia = (str(fecha) + '_dataExport.xls')
+            option = QtWidgets.QFileDialog.Options()
+            directorio, filename = var.dlgabrir.getSaveFileName(None, 'Exportar datos', var.copia, '.xls', options=option)
+            wb = xlwt.Workbook()
+            # add_sheet is used to create sheet.
+            sheet1 = wb.add_sheet('Hoja 1')
+
+            # Cabeceras
+            sheet1.write(0, 0, 'DNI')
+            sheet1.write(0, 1, 'APELIDOS')
+            sheet1.write(0, 2, 'NOME')
+            sheet1.write(0, 3, 'DIRECCION')
+            sheet1.write(0, 4, 'PROVINCIA')
+            sheet1.write(0, 5, 'SEXO')
+            f = 1
+            query = QtSql.QSqlQuery()
+            query.prepare('SELECT *  FROM clientes')
+            if query.exec_():
+                while query.next():
+                    sheet1.write(f, 0, query.value(0))
+                    sheet1.write(f, 1, query.value(2))
+                    sheet1.write(f, 2, query.value(3))
+                    sheet1.write(f, 3, query.value(4))
+                    sheet1.write(f, 4, query.value(5))
+                    sheet1.write(f, 5, query.value(7))
+                    f+=1
+            wb.save(directorio)
+
+        except Exception as error:
+            print('Error en conexion para exportar excel ',error)

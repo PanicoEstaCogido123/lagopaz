@@ -1,4 +1,5 @@
-import conexion, var
+from img import var
+import conexion
 from window import *
 from PyQt5 import QtSql
 
@@ -33,7 +34,7 @@ class Clientes():
                 var.ui.txtDNI.setStyleSheet("background-color:pink;")
         except Exception as error:
             print('Error en validar DNI')
-
+    '''
     def validarDNI(dni):
         try:
             resultado=0
@@ -57,6 +58,7 @@ class Clientes():
                 return resultado
         except Exception as error:
             print('Error en validar DNIexcel', error)
+    '''
 
     def cargaProv(prov):
         try:
@@ -78,13 +80,14 @@ class Clientes():
         try:
             data=('{0}/{1}/{2}'.format(qDate.day(),qDate.month(),qDate.year()))
             var.ui.txtFecha.setText(str(data))
+            var.ui.txtFechaFactura.setText(str(data))
             var.dlgcalendar.hide()
         except Exception as error:
             print('Error en modulo cargarFecha', error)
 
     def letraCapital():
         try:
-            textoApel=var.ui.txtApel.text()
+            textoApel= var.ui.txtApel.text()
             textoNom = var.ui.txtNome.text()
             textoDir = var.ui.txtDir.text()
             var.ui.txtApel.setText(textoApel.title())
@@ -94,7 +97,9 @@ class Clientes():
             print('Error en validar DNI')
 
     def guardaCli(self):
+        print("En grabaCli")
         Clientes.validarDNI()
+        print("dni validado")
         if (resultado==1):
             try:
                 #preparamos el registro
@@ -200,7 +205,7 @@ class Clientes():
     def modifCli(self):
         try:
             modcliente = []
-            cliente = [var.ui.txtDNI, var.ui.txtFecha,  var.ui.txtApel, var.ui.txtNome, var.ui.txtDir]
+            cliente = [var.ui.txtDNI, var.ui.txtFecha, var.ui.txtApel, var.ui.txtNome, var.ui.txtDir]
             for i in cliente:
                 modcliente.append(i.text())
             modcliente.append(var.ui.cmbProv.currentText())

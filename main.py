@@ -1,4 +1,8 @@
-import clients, conexion, sys, var, events, locale
+import articles
+import sys, events, locale, informes
+from img import var
+import conexion
+import clients
 from window import *
 from windowaviso import *
 from windowcal import *
@@ -17,7 +21,7 @@ class DialogCalendar(QtWidgets.QDialog):
         diaactual=datetime.now().day
         mesactual = datetime.now().month
         anoactual = datetime.now().year
-        var.dlgcalendar.calendarWidget.setSelectedDate((QtCore.QDate(anoactual,mesactual,diaactual)))
+        var.dlgcalendar.calendarWidget.setSelectedDate((QtCore.QDate(anoactual, mesactual, diaactual)))
         var.dlgcalendar.calendarWidget.clicked.connect(clients.Clientes.cargarFecha)
 
 class DialogAviso(QtWidgets.QDialog):
@@ -40,8 +44,14 @@ class Main(QtWidgets.QMainWindow):
         var.ui.btnGrabaCli.clicked.connect(clients.Clientes.guardaCli)
         var.ui.btnSalir.clicked.connect(events.Eventos.Salir)
         var.ui.btnCalendar.clicked.connect(events.Eventos.abrircal)
+        var.ui.btnCalendarFactura.clicked.connect(events.Eventos.abrircal)
         var.ui.btnBorraCli.clicked.connect(conexion.Conexion.bajaCli)
         var.ui.btnModifCli.clicked.connect(clients.Clientes.modifCli)
+        var.ui.btnGuardarArticulo.clicked.connect(articles.Articles.guardaArticulo)
+        var.ui.btnModificarArticulo.clicked.connect(conexion.Conexion.modifArt)
+        var.ui.btnBorrarArticulo.clicked.connect(conexion.Conexion.bajaArt)
+        var.ui.btnBuscarArticulo.clicked.connect(conexion.Conexion.buscarArt)
+        var.ui.btnLimpiaFormArticulo.clicked.connect(articles.Articles.limpiaFormArt)
         '''
         Eventos de barra de menus y herramientas
         '''
@@ -50,11 +60,13 @@ class Main(QtWidgets.QMainWindow):
         var.ui.actionCrear_Backup.triggered.connect(events.Eventos.crearBackup)
         var.ui.actionRestaurar_BBDD.triggered.connect(events.Eventos.restaurarBackup)
         var.ui.actionImportar_Datos.triggered.connect(conexion.Conexion.cargarExcel)
+        var.ui.actionExportar_Datos.triggered.connect(conexion.Conexion.ExportarExcel)
         var.ui.actionbarSalir.triggered.connect(events.Eventos.Salir)
         var.ui.actionbarAbrirCarpeta.triggered.connect(events.Eventos.Abrir)
         var.ui.actionbarCrearBackup.triggered.connect(events.Eventos.crearBackup)
         var.ui.actionbarRestaurarBackup.triggered.connect(events.Eventos.restaurarBackup)
         var.ui.actionbarImprimir.triggered.connect(events.Eventos.imprimir)
+        var.ui.actionListado_Clientes.triggered.connect(informes.Informes.listadoClientes)
         '''
         Eventos caja de texto DNI
         '''
@@ -69,9 +81,12 @@ class Main(QtWidgets.QMainWindow):
         events.Eventos.resizeTablaCli(self)
         var.ui.tabClientes.clicked.connect(clients.Clientes.limpiaFormCli)
         var.ui.tabClientes.clicked.connect(clients.Clientes.cargaCli)
+        var.ui.tabArticulos.clicked.connect(articles.Articles.cargaArticulo)
         var.ui.tabClientes.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
+        var.ui.tabArticulos.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
         conexion.Conexion.db_connect(var.filedb)
         conexion.Conexion.cargarTabCli()
+        conexion.Conexion.cargarTabArt()
         conexion.Conexion.cargaProv(self)
         '''
         Eventos combobox
@@ -80,7 +95,7 @@ class Main(QtWidgets.QMainWindow):
         '''
         Barra de estado
         '''
-        var.ui.statusbar.addPermanentWidget(var.ui.lblFecha_2,1)
+        var.ui.statusbar.addPermanentWidget(var.ui.lblFecha_2, 1)
         day=datetime.now()
         var.ui.lblFecha_2.setText(day.strftime('%A, %d de %B de %Y').capitalize())
 

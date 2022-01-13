@@ -23,12 +23,11 @@ class Eventos():
         except Exception as error:
             print('Error en el modulo abrircal ', error)
 
-
     def resizeTablaCli(self):
         header = var.ui.tabClientes.horizontalHeader()
         for i in range(5):
             header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
-            if i == 0 or i==3:
+            if i == 0 or i == 3:
                 header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
 
     def Abrir(self):

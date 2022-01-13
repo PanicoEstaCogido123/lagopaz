@@ -4,11 +4,9 @@ import xlwt as xlwt
 from PyQt5 import QtSql
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMessageBox
-
 import xlrd
 from img import var
 import clients
-
 
 class Conexion():
     def db_connect(filename):
@@ -26,6 +24,29 @@ class Conexion():
     '''
     Gestion BBDD articulo
     '''
+    def altaFactura(newFactura):
+
+        pass
+    def cargaTabFactura():
+        try:
+            index = 0
+            query = QtSql.QSqlQuery()
+            query.prepare('select codfac, dni, fechafac from facturas order by codfac')
+            if query.exec_():
+                while query.next():
+                    codfac = str(query.value(0))
+                    dni = query.value(1)
+                    fechafac = query.value(2)
+                    
+                    var.ui.tabClientesFacturas.setRowCount(index + 1) #creamos la fila y luego cargamos datos
+                    var.ui.tabClientesFacturas.setItem(index, 0, QtWidgets.QTableWidgetItem(codfac))
+                    #var.ui.tabClientesFacturas.setItem(index, 0, QtWidgets.QTableWidgetItem(dni))
+                    var.ui.tabClientesFacturas.setItem(index, 1, QtWidgets.QTableWidgetItem(fechafac))
+                    index += 1
+        except Exception as error:
+            print('Problemas mostrar tabla facturas', error)
+        pass
+
     def altaArt(newArt):
         if var.ui.lblid.text()== "":
             try:

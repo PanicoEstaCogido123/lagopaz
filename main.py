@@ -1,5 +1,7 @@
 import articles
 import sys, events, locale, informes
+
+import invoices
 from img import var
 import conexion
 import clients
@@ -40,6 +42,8 @@ class Main(QtWidgets.QMainWindow):
         '''
         Eventos de boton
         '''
+        var.ui.btnFacturar.clicked.connect(invoices.Invoices.facturar)
+        var.ui.btnBuscarFactura.clicked.connect(invoices.Invoices.buscarClienteFactura)
         var.ui.btnLimpiaFormCliente.clicked.connect(clients.Clientes.limpiaFormCli)
         var.ui.btnGrabaCli.clicked.connect(clients.Clientes.guardaCli)
         var.ui.btnSalir.clicked.connect(events.Eventos.Salir)
@@ -78,16 +82,23 @@ class Main(QtWidgets.QMainWindow):
         '''
         Eventos QtabWidgets
         '''
+        var.ui.tabClientesFacturas.clicked.connect(invoices.Invoices.cargarFactura)
         events.Eventos.resizeTablaCli(self)
         var.ui.tabClientes.clicked.connect(clients.Clientes.limpiaFormCli)
         var.ui.tabClientes.clicked.connect(clients.Clientes.cargaCli)
+        var.ui.tabClientes.clicked.connect(invoices.Invoices.cargaClienteFactura)
         var.ui.tabArticulos.clicked.connect(articles.Articles.cargaArticulo)
         var.ui.tabClientes.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
         var.ui.tabArticulos.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
+        var.ui.tabClientesFacturas.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
+        var.ui.tabVentas.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
+        #invoices.Invoices.preparaTabFac(self)
+        invoices.Invoices.cargarLineaVenta(self)
         conexion.Conexion.db_connect(var.filedb)
         conexion.Conexion.cargarTabCli()
         conexion.Conexion.cargarTabArt()
         conexion.Conexion.cargaProv(self)
+        conexion.Conexion.cargaTabFactura()
         '''
         Eventos combobox
         '''

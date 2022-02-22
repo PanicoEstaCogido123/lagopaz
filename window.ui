@@ -952,8 +952,8 @@ color:'red';
        <string/>
       </property>
       <property name="icon">
-       <iconset>
-        <normaloff>img/98865.png</normaloff>img/98865.png</iconset>
+       <iconset resource="img/limpiar.qrc">
+        <normaloff>:/newPrefix/98865.png</normaloff>:/newPrefix/98865.png</iconset>
       </property>
      </widget>
     </widget>
@@ -1080,8 +1080,8 @@ color:'red';
         <string/>
        </property>
        <property name="icon">
-        <iconset>
-         <normaloff>img/calend.png</normaloff>img/calend.png</iconset>
+        <iconset resource="img/calendario.qrc">
+         <normaloff>:/newPrefix/calend.png</normaloff>:/newPrefix/calend.png</iconset>
        </property>
       </widget>
       <widget class="Line" name="line_4">
@@ -1250,7 +1250,7 @@ color:'red';
        <rect>
         <x>20</x>
         <y>170</y>
-        <width>201</width>
+        <width>231</width>
         <height>451</height>
        </rect>
       </property>
@@ -1273,13 +1273,18 @@ color:'red';
         <string>Fecha</string>
        </property>
       </column>
+      <column>
+       <property name="text">
+        <string/>
+       </property>
+      </column>
      </widget>
      <widget class="QLabel" name="label_9">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>20</x>
         <y>150</y>
-        <width>101</width>
+        <width>231</width>
         <height>16</height>
        </rect>
       </property>
@@ -1293,10 +1298,10 @@ color:'red';
      <widget class="QLabel" name="label_13">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>20</x>
         <y>20</y>
-        <width>101</width>
-        <height>16</height>
+        <width>231</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="text">
@@ -1331,10 +1336,10 @@ color:'red';
      <widget class="QLabel" name="label_15">
       <property name="geometry">
        <rect>
-        <x>460</x>
+        <x>250</x>
         <y>20</y>
-        <width>101</width>
-        <height>16</height>
+        <width>261</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="text">
@@ -1347,9 +1352,9 @@ color:'red';
      <widget class="QTableWidget" name="tabVentas">
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>310</x>
         <y>170</y>
-        <width>661</width>
+        <width>660</width>
         <height>360</height>
        </rect>
       </property>
@@ -1397,7 +1402,7 @@ color:'red';
      <widget class="Line" name="line_9">
       <property name="geometry">
        <rect>
-        <x>250</x>
+        <x>270</x>
         <y>170</y>
         <width>20</width>
         <height>361</height>
@@ -1405,6 +1410,38 @@ color:'red';
       </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_16">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>150</y>
+        <width>661</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ventas</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblVentas">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>530</y>
+        <width>661</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </widget>
@@ -2042,8 +2079,8 @@ color:'red';
        <string/>
       </property>
       <property name="icon">
-       <iconset>
-        <normaloff>img/98865.png</normaloff>img/98865.png</iconset>
+       <iconset resource="img/limpiar.qrc">
+        <normaloff>:/newPrefix/98865.png</normaloff>:/newPrefix/98865.png</iconset>
       </property>
      </widget>
     </widget>
@@ -2168,8 +2205,8 @@ color:'red';
   </action>
   <action name="actionbarSalir">
    <property name="icon">
-    <iconset>
-     <normaloff>img/salir.png</normaloff>img/salir.png</iconset>
+    <iconset resource="img/salir.qrc">
+     <normaloff>:/newPrefix/salir.png</normaloff>:/newPrefix/salir.png</iconset>
    </property>
    <property name="text">
     <string>barSalir</string>
@@ -2180,8 +2217,8 @@ color:'red';
   </action>
   <action name="actionbarAbrirCarpeta">
    <property name="icon">
-    <iconset>
-     <normaloff>img/abrir.png</normaloff>img/abrir.png</iconset>
+    <iconset resource="img/abrirCarpeta.qrc">
+     <normaloff>:/newPrefix/abrir.png</normaloff>:/newPrefix/abrir.png</iconset>
    </property>
    <property name="text">
     <string>barAbrirCarpeta</string>
@@ -2192,8 +2229,8 @@ color:'red';
   </action>
   <action name="actionbarCrearBackup">
    <property name="icon">
-    <iconset>
-     <normaloff>img/subir.png</normaloff>img/subir.png</iconset>
+    <iconset resource="img/subir.qrc">
+     <normaloff>:/newPrefix/subir.png</normaloff>:/newPrefix/subir.png</iconset>
    </property>
    <property name="text">
     <string>barCrearBackup</string>
@@ -2201,8 +2238,8 @@ color:'red';
   </action>
   <action name="actionbarRestaurarBackup">
    <property name="icon">
-    <iconset>
-     <normaloff>img/bajar.png</normaloff>img/bajar.png</iconset>
+    <iconset resource="img/bajar.qrc">
+     <normaloff>:/newPrefix/bajar.png</normaloff>:/newPrefix/bajar.png</iconset>
    </property>
    <property name="text">
     <string>barRestaurarBackup</string>
@@ -2210,8 +2247,8 @@ color:'red';
   </action>
   <action name="actionbarImprimir">
    <property name="icon">
-    <iconset>
-     <normaloff>img/impresora.png</normaloff>img/impresora.png</iconset>
+    <iconset resource="img/imprimir.qrc">
+     <normaloff>:/newPrefix/impresora.png</normaloff>:/newPrefix/impresora.png</iconset>
    </property>
    <property name="text">
     <string>barImprimir</string>
@@ -2233,7 +2270,15 @@ color:'red';
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="img/limpiar.qrc"/>
+  <include location="img/bajar.qrc"/>
+  <include location="img/subir.qrc"/>
+  <include location="img/imprimir.qrc"/>
+  <include location="img/abrirCarpeta.qrc"/>
+  <include location="img/salir.qrc"/>
+  <include location="img/calendario.qrc"/>
+ </resources>
  <connections/>
  <buttongroups>
   <buttongroup name="rbtGroupSex"/>
